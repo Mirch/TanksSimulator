@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\TanksSimulator.Core\TanksSimulator.Game.csproj" />
+    <ProjectReference Include="..\TanksSimulator.Shared\TanksSimulator.Shared.csproj" />
   </ItemGroup>
 
 
