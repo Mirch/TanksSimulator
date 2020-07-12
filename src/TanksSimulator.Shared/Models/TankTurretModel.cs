@@ -9,6 +9,6 @@ namespace TanksSimulator.Shared.Models
         public int Id { get; set; }
         public double Range { get; set; }
         public double Damage { get; set; }
-        public double Armor { get; set; }
+        public double Accuracy { get; set; }
     }
 }

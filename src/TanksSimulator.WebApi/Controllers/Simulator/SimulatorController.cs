@@ -39,9 +39,9 @@ namespace TanksSimulator.WebApi.Controllers.Simulator
 
             _gameDataRepository.Insert(gameData);
 
-            GameSimulator simulator = new GameSimulator(map, tank1, tank2);
+            GameSimulator simulator = new GameSimulator(map);
 
-            simulator.Start(); // in a thread
+            simulator.Start(tank1, tank2); // in a thread
 
             return Ok(gameData);
         }
