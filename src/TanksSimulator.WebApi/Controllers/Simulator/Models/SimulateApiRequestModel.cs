@@ -7,7 +7,7 @@ namespace TanksSimulator.WebApi.Controllers.Simulator.Models
 {
     public class SimulateApiRequestModel
     {
-        public int[] Tanks { get; set; }
-        public int MapId { get; set; }
+        public string[] Tanks { get; set; }
+        public string MapId { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using TanksSimulator.Game.Utils;
+using TanksSimulator.Shared.Models;
 
 namespace TanksSimulator.Game.Map
 {
@@ -14,11 +15,11 @@ namespace TanksSimulator.Game.Map
 
         public int Size { get; private set; }
 
-        public GameMap(int size, string map)
+        public GameMap(GameMapModel model)
         {
-            Size = size;
+            Size = model.Size;
             _tiles = new List<Tile>();
-            BuildMap(map);
+            BuildMap(model.Tiles);
         }
 
         private void BuildMap(string map)

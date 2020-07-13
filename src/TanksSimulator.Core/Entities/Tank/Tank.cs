@@ -17,19 +17,25 @@ namespace TanksSimulator.Game.Entities.Tank
         public bool CanShoot { get { return !Barrel.IsDestroyed; } }
         public bool IsDestroyed { get { return MainBody.IsDestroyed; } }
 
+        public string TankId { get; private set; }
 
         public Tank Enemy { get; set; }
 
         public Tank(
+            string id,
             TankModel model,
             Vector2i position,
             GameMap gameMap)
             : base(gameMap)
         {
+            TankId = id;
+
             Name = model.Name;
             Position = position;
 
             Barrel = new TankBarrel(model.Barrel);
+            MainBody = new TankMainBody();
+            RoadWheel = new TankRoadWheels();
         }
 
         public override Event Act()

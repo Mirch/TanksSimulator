@@ -4,27 +4,26 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TanksSimulator.Shared.Models;
 using TanksSimulator.WebApi.Data;
 
-namespace TanksSimulator.WebApi.Controllers.Tanks
+namespace TanksSimulator.WebApi.Controllers.Maps
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TanksController : ControllerBase
+    public class MapsController : ControllerBase
     {
-        private readonly TanksRepository _tanksRepository;
+        private readonly MapsRepository _mapsRepository;
 
-        public TanksController(
-            TanksRepository tanksRepository)
+        public MapsController(
+            MapsRepository mapsRepository)
         {
-            _tanksRepository = tanksRepository;
+            _mapsRepository = mapsRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _tanksRepository.GetAsync();
+            var result = await _mapsRepository.GetAsync();
 
             return Ok(result);
         }
@@ -32,15 +31,14 @@ namespace TanksSimulator.WebApi.Controllers.Tanks
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
-            var result = _tanksRepository.GetByIdAsync(id);
+            var result = _mapsRepository.GetByIdAsync(id);
 
             if (result == null)
             {
-                return NotFound(new { error = "Could not find tank." });
+                return NotFound(new { error = "Could not find map." });
             }
 
             return Ok(result);
         }
-
     }
 }

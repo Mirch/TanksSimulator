@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TanksSimulator.Game;
+using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
+using TanksSimulator.Shared.Utils;
 using TanksSimulator.WebApi.Data;
 
 namespace TanksSimulator.WebApi.Services
@@ -11,41 +13,44 @@ namespace TanksSimulator.WebApi.Services
     public class GameSimulatorService
     {
         private readonly GameDataRepository _gameDataRepository;
+        private readonly MapsRepository _mapsRepository;
+        private readonly TanksRepository _tanksRepository;
 
         public GameSimulatorService(
-            GameDataRepository gameDataRepository)
+            GameDataRepository gameDataRepository,
+            MapsRepository mapsRepository,
+            TanksRepository tanksRepository)
         {
             _gameDataRepository = gameDataRepository;
+            _mapsRepository = mapsRepository;
+            _tanksRepository = tanksRepository;
         }
 
-        private void SaveGameLogs(object sender, EventArgs e)
+        private async void SaveGameLogs(object sender, GameFinishedEventArgs e)
         {
             var logger = (sender as GameSimulator).Logger;
             var logs = logger.Flush();
-            //TODO: save to database
+
+            var gameData = await _gameDataRepository.GetByIdAsync(e.GameId);
+
+            gameData.Logs = logs;
+            gameData.WinnerId = e.WinnerTankId;
+            gameData.Status = GameStatus.Finished;
+
+            await _gameDataRepository.UpdateAsync(gameData);
         }
 
-        public GameDataModel Simulate()
+        public async Task<GameDataModel> SimulateAsync(string gameId)
         {
-            TankModel tank1 = new TankModel(); // from request
-            TankModel tank2 = new TankModel(); // from request
-            GameMapModel map = new GameMapModel()
-            {
-            };
+            var gameData = await _gameDataRepository.GetByIdAsync(gameId);
 
-            GameDataModel gameData = new GameDataModel
-            {
-                MapId = map.Id,
-                Tank1Id = tank1.Id,
-                Tank2Id = tank2.Id
-            };
-
-            _gameDataRepository.Insert(gameData);
-
-            GameSimulator simulator = new GameSimulator(map);
+            GameSimulator simulator = new GameSimulator(gameData.Id, gameData.GameMapModel);
             simulator.GameFinished += SaveGameLogs;
 
-            simulator.Start(tank1, tank2); // in a thread
+            simulator.Start(gameData.TankModel1, gameData.TankModel2);
+
+            gameData.Status = GameStatus.InProgress;
+            await _gameDataRepository.UpdateAsync(gameData);
 
             return gameData;
         }

@@ -6,7 +6,6 @@ namespace TanksSimulator.Shared.Models
 {
     public enum GameStatus
     {
-        Created,
         InQueue,
         InProgress,
         Finished

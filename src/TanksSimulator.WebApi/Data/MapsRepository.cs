@@ -15,7 +15,7 @@ namespace TanksSimulator.WebApi.Data
             IMongoDatabase database,
             ITanksSimulatorDbSettings databaseSettings)
         {
-            _maps = database.GetCollection<GameMapModel>(databaseSettings.TanksCollection);
+            _maps = database.GetCollection<GameMapModel>(databaseSettings.MapsCollection);
         }
 
         public async Task<List<GameMapModel>> GetAsync()

@@ -15,7 +15,7 @@ namespace TanksSimulator.WebApi.Data
             IMongoDatabase database,
             ITanksSimulatorDbSettings databaseSettings)
         {
-            _gameData = database.GetCollection<GameDataModel>(databaseSettings.TanksCollection);
+            _gameData = database.GetCollection<GameDataModel>(databaseSettings.GameDataCollection);
         }
 
         public async Task<List<GameDataModel>> GetAsync()
@@ -33,6 +33,13 @@ namespace TanksSimulator.WebApi.Data
                 .SingleAsync();
 
             return result;
+        }
+
+        public async Task<GameDataModel> CreateAsync(GameDataModel model)
+        {
+            await _gameData.InsertOneAsync(model);
+
+            return model;
         }
 
         public async Task<GameDataModel> UpdateAsync(GameDataModel model)

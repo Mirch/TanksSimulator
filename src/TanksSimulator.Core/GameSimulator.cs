@@ -7,35 +7,52 @@ using TanksSimulator.Game.Events;
 using TanksSimulator.Game.Map;
 using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
+using TanksSimulator.Shared.Utils;
 
 namespace TanksSimulator.Game
 {
     public class GameSimulator
     {
+        private string _gameId;
+
         //Game loop
         public bool Running { get; private set; }
-        public event EventHandler GameFinished;
+        public event EventHandler<GameFinishedEventArgs> GameFinished;
         private Thread _gameThread;
 
         //Game logic
         private List<Tank> _tanks;
         private GameMap _map;
+        private int _turns;
+        private Tank _winner;
 
         //Utils
         public Logger Logger { get; }
         private Random _random;
 
         public GameSimulator(
+            string gameiId,
             GameMapModel map)
         {
-            _random = new Random();
+            _gameId = gameiId;
+
             Logger = new Logger();
-            //TODO: build map
+            _random = new Random();
+
+            _tanks = new List<Tank>();
+            _map = new GameMap(map);
         }
 
         private void OnGameFinished()
         {
-            GameFinished?.Invoke(this, null);
+            GameFinished?.Invoke(
+                this,
+                new GameFinishedEventArgs
+                {
+                    GameId = _gameId,
+                    NumberOfTurns = _turns,
+                    WinnerTankId = _winner.TankId
+                });
         }
 
         public void Start(
@@ -60,7 +77,7 @@ namespace TanksSimulator.Game
         {
             Running = true;
 
-            uint turn = 1; // keeping track of the game's turns
+            _turns = 1; // keeping track of the game's turns
             var actingTank = _random.Next(_tanks.Count); // the index of the tank that is acting this turn
 
             var chainedEvents = new List<Event>(); // events triggered from last turn
@@ -79,11 +96,12 @@ namespace TanksSimulator.Game
                 if (_tanks.Any(t => t.IsDestroyed))
                 {
                     Running = false;
+                    _winner = _tanks.SingleOrDefault(t => !t.IsDestroyed);
                     break;
                 }
 
                 actingTank = (actingTank + 1) % _tanks.Count; // changing the turn
-                turn++;
+                _turns++;
             }
             OnGameFinished();
         }
@@ -95,7 +113,8 @@ namespace TanksSimulator.Game
                 X = _random.Next(_map.Size),
                 Y = _random.Next(_map.Size)
             };
-            return new Tank(tankModel, position, _map);
+            Logger.Log($"Placing {tankModel.Name} at ({position.X}, {position.Y}.)");
+            return new Tank(tankModel.Id, tankModel, position, _map);
         }
     }
 }

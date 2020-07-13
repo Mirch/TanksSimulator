@@ -10,6 +10,8 @@ namespace TanksSimulator.WebApi.Data
         public string ConnectionString { get; set; }
         public string DatabaseName { get; set; }
         public string TanksCollection { get; set; }
+        public string MapsCollection { get; set; }
+        public string GameDataCollection { get; set; }
     }
 
     public interface ITanksSimulatorDbSettings
@@ -17,5 +19,7 @@ namespace TanksSimulator.WebApi.Data
         string ConnectionString { get; set; }
         string DatabaseName { get; set; }
         string TanksCollection { get; set; }
+        string MapsCollection { get; set; }
+        string GameDataCollection { get; set; }
     }
 }
