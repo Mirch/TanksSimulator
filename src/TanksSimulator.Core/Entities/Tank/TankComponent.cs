@@ -38,6 +38,11 @@ namespace TanksSimulator.Game.Entities.Tank
 
             Armor = 100;
         }
+
+        public void Repair()
+        {
+            Armor = 100;
+        }
     }
 
     public class TankMainBody : TankComponent

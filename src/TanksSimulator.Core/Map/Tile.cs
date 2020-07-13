@@ -5,7 +5,7 @@ using TanksSimulator.Game.Utils;
 
 namespace TanksSimulator.Game.Map
 {
-    public class Tile
+    public abstract class Tile
     {
         public bool Solid { get; private set; }
 
@@ -13,6 +13,22 @@ namespace TanksSimulator.Game.Map
             bool solid)
         {
             Solid = solid;
+        }
+    }
+
+    public class PlainTile : Tile
+    {
+        public PlainTile()
+            : base(false)
+        {
+        }
+    }
+
+    public class RockTile : Tile
+    {
+        public RockTile()
+            : base(true)
+        {
         }
     }
 }

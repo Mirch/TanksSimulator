@@ -7,6 +7,6 @@ namespace TanksSimulator.Game.Events
 {
     public abstract class Event
     {
-        public abstract void Process(Logger logger);
+        public abstract EventResult Process(Logger logger);
     }
 }

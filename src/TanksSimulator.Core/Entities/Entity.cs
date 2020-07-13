@@ -15,6 +15,6 @@ namespace TanksSimulator.Game.Entities
             GameMap = map;
         }
 
-        public abstract Event DecideAction();
+        public abstract Event Act();
     }
 }

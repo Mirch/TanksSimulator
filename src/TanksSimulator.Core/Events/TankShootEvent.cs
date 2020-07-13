@@ -18,7 +18,7 @@ namespace TanksSimulator.Game.Events
             _random = new Random();
         }
 
-        public override void Process(Logger logger)
+        public override EventResult Process(Logger logger)
         {
             var result = ProcessHit(_attacker, _target);
             logger.Log(result);
@@ -28,6 +28,15 @@ namespace TanksSimulator.Game.Events
                 var tankDestroyedEvent = new TankDestroyedEvent(_attacker, _target);
                 tankDestroyedEvent.Process(logger);
             }
+
+            if (_target.Turret.IsDestroyed)
+            {
+                var resultEvent = new EventResult();
+                resultEvent.ChainEvent = new TankTurretRepairingEvent(_target, 2);
+                return resultEvent;
+            }
+
+            return EventResult.Succeeded;
         }
 
         private string ProcessHit(Tank attacker, Tank target)
@@ -53,7 +62,7 @@ namespace TanksSimulator.Game.Events
                     target.RoadWheel.GetHit(damage);
                     break;
                 case 2:
-                    damage = _random.Next(30, 40);
+                    damage = _random.Next(50, 70);
                     result = $"{attacker.Name} hits {target.Name}'s turret for {damage} damage.";
                     target.Turret.GetHit(damage);
                     break;

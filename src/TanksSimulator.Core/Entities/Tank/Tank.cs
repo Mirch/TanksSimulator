@@ -1,4 +1,6 @@
-﻿using TanksSimulator.Game.Events;
+﻿using System.Collections.Generic;
+using System.Linq;
+using TanksSimulator.Game.Events;
 using TanksSimulator.Game.Map;
 using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
@@ -15,7 +17,8 @@ namespace TanksSimulator.Game.Entities.Tank
         public bool CanShoot { get { return !Turret.IsDestroyed; } }
         public bool IsDestroyed { get { return MainBody.IsDestroyed; } }
 
-        private Tank _enemy;
+
+        public Tank Enemy { get; set; }
 
         public Tank(
             TankModel model,
@@ -29,24 +32,40 @@ namespace TanksSimulator.Game.Entities.Tank
             Turret = new TankTurret(model.Turret);
         }
 
-        public void SetEnemy(Tank tank)
+        public override Event Act()
         {
-            _enemy = tank;
-        }
-
-        public override Event DecideAction()
-        {
-            if (CanShoot && HasShootingLine())
+            if (MainBody.Armor < 15 || !CanShoot) // go into defensive mode
             {
-                return new TankShootEvent(this, _enemy);
+                var destination = GetNeighourVisitableTiles()
+                    .Where(p => !HasShootingLine(p))
+                    .OrderByDescending(p => p.DistanceTo(Enemy.Position))
+                    .First();
+
+                return new TankMoveEvent(this, destination - Position);
             }
 
-            return new TankMoveEvent(this, new Vector2i { X = 1, Y = 1 });
+            if (CanShoot && HasShootingLine(Position)) // if it can shoot, shoot
+            {
+                return new TankShootEvent(this, Enemy);
+            }
+            else // if there is nothing to do, move towards the enemy
+            {
+                var moveTo = DecideMovePosition();
+                return new TankMoveEvent(this, moveTo);
+            }
         }
 
-        private bool HasShootingLine()
+        private Vector2i DecideMovePosition()
         {
-            var shootingLine = new Line(Position, _enemy.Position);
+            var path = GameMap.FindPath(Position, Enemy.Position);
+            var nextNode = path[path.Count - 1];
+
+            return nextNode.Position - Position;
+        }
+
+        private bool HasShootingLine(Vector2i startingPosition)
+        {
+            var shootingLine = new Line(startingPosition, Enemy.Position);
             var collidingTiles = shootingLine.GetIntersectingPoints();
 
             foreach (var coords in collidingTiles)
@@ -58,6 +77,34 @@ namespace TanksSimulator.Game.Entities.Tank
                 }
             }
             return true;
+        }
+
+        private IEnumerable<Vector2i> GetNeighourVisitableTiles()
+        {
+            var result = new List<Vector2i>();
+
+            var deltas = new List<Vector2i>
+            {
+                new Vector2i {X= 0, Y= 1},
+                new Vector2i {X= 1, Y= 1},
+                new Vector2i {X= 1, Y= 0},
+                new Vector2i {X= 1, Y= -1},
+                new Vector2i {X= 0, Y= -1},
+                new Vector2i {X= -1,Y= -1},
+                new Vector2i {X= -1,Y= 0},
+                new Vector2i {X= -1,Y= 1}
+            };
+
+            foreach (var delta in deltas)
+            {
+                var pos = Position + delta;
+                var tile = GameMap.GetTile(pos);
+                if (!tile.Solid)
+                {
+                    result.Add(pos);
+                }
+            }
+            return result;
         }
     }
 }

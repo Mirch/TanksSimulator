@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using TanksSimulator.Game.Entities.Tank;
+using TanksSimulator.Game.Events;
 using TanksSimulator.Game.Map;
 using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
@@ -38,8 +39,8 @@ namespace TanksSimulator.Game
             var tankEntity1 = BuildTank(tank1);
             var tankEntity2 = BuildTank(tank2);
 
-            tankEntity1.SetEnemy(tankEntity2);
-            tankEntity2.SetEnemy(tankEntity1);
+            tankEntity1.Enemy = tankEntity2;
+            tankEntity2.Enemy = tankEntity1;
 
             _tanks.Add(tankEntity1);
             _tanks.Add(tankEntity2);
@@ -54,10 +55,18 @@ namespace TanksSimulator.Game
             uint turn = 1; // keeping track of the game's turns
             var actingTank = _random.Next(_tanks.Count); // the index of the tank that is acting this turn
 
+            var chainedEvents = new List<Event>(); // events triggered from last turn
+
             while (_running)
             {
-                var resultEvent = _tanks[actingTank].DecideAction();
-                resultEvent.Process(_logger);
+                chainedEvents.ForEach(c => c.Process(_logger)); // processing events from last turn before acting this turn
+
+                var resultEvent = _tanks[actingTank].Act();
+                var result = resultEvent.Process(_logger);
+                if (result != EventResult.Succeeded)
+                {
+                    chainedEvents.Add(result.ChainEvent);
+                }
 
                 if (_tanks.Any(t => t.IsDestroyed))
                 {

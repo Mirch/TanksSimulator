@@ -17,11 +17,12 @@ namespace TanksSimulator.Game.Events
             _loser = loser;
         }
 
-        public override void Process(Logger logger)
+        public override EventResult Process(Logger logger)
         {
             logger.Log($"{_loser.Name} was destroyed by {_winner.Name}.");
             logger.Log($"{_winner.Name} WON THE GAME!");
 
+            return EventResult.Succeeded;
         }
     }
 }
