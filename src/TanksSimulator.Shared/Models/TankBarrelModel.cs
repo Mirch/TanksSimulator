@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TanksSimulator.Shared.Models
 {
-    public class TankTurretModel
+    public class TankBarrelModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
         public double Range { get; set; }
         public double Damage { get; set; }
         public double Accuracy { get; set; }

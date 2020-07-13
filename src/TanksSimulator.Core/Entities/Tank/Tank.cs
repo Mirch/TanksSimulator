@@ -10,11 +10,11 @@ namespace TanksSimulator.Game.Entities.Tank
     public class Tank : Entity
     {
         public TankMainBody MainBody { get; set; }
-        public TankTurret Turret { get; private set; }
+        public TankBarrel Barrel { get; private set; }
         public TankRoadWheels RoadWheel { get; set; }
 
         public bool CanMove { get { return !RoadWheel.IsDestroyed; } }
-        public bool CanShoot { get { return !Turret.IsDestroyed; } }
+        public bool CanShoot { get { return !Barrel.IsDestroyed; } }
         public bool IsDestroyed { get { return MainBody.IsDestroyed; } }
 
 
@@ -29,7 +29,7 @@ namespace TanksSimulator.Game.Entities.Tank
             Name = model.Name;
             Position = position;
 
-            Turret = new TankTurret(model.Turret);
+            Barrel = new TankBarrel(model.Barrel);
         }
 
         public override Event Act()

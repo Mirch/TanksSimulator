@@ -29,10 +29,10 @@ namespace TanksSimulator.Game.Events
                 tankDestroyedEvent.Process(logger);
             }
 
-            if (_target.Turret.IsDestroyed)
+            if (_target.Barrel.IsDestroyed)
             {
                 var resultEvent = new EventResult();
-                resultEvent.ChainEvent = new TankTurretRepairingEvent(_target, 2);
+                resultEvent.ChainEvent = new TankBarrelRepairingEvent(_target, 2);
                 return resultEvent;
             }
 
@@ -42,29 +42,27 @@ namespace TanksSimulator.Game.Events
         private string ProcessHit(Tank attacker, Tank target)
         {
             var missChance = _random.Next(100);
-            if (missChance > attacker.Turret.Accuracy)
+            if (missChance > attacker.Barrel.Accuracy)
             {
                 return $"{attacker.Name} tried shooting {target.Name}, but missed.";
             }
 
             var hittingPlace = _random.Next(2);
+            var damage = _random.Next((int)Math.Floor(attacker.Barrel.Damage * 0.8), (int)Math.Floor(attacker.Barrel.Damage));
             string result = "";
             switch (hittingPlace)
             {
                 case 0:
-                    var damage = _random.Next(10, 15);
                     result = $"{attacker.Name} hits {target.Name} in the main body for {damage} damage.";
                     target.MainBody.GetHit(damage);
                     break;
                 case 1:
-                    damage = _random.Next(20, 25);
                     result = $"{attacker.Name} hits {target.Name}'s road wheels for {damage} damage.";
                     target.RoadWheel.GetHit(damage);
                     break;
                 case 2:
-                    damage = _random.Next(50, 70);
-                    result = $"{attacker.Name} hits {target.Name}'s turret for {damage} damage.";
-                    target.Turret.GetHit(damage);
+                    result = $"{attacker.Name} hits {target.Name}'s barrel for {damage} damage.";
+                    target.Barrel.GetHit(damage);
                     break;
             }
 

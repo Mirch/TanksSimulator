@@ -25,16 +25,15 @@ namespace TanksSimulator.WebApi.Services
             //TODO: save to database
         }
 
-        public GameData Simulate()
+        public GameDataModel Simulate()
         {
             TankModel tank1 = new TankModel(); // from request
             TankModel tank2 = new TankModel(); // from request
             GameMapModel map = new GameMapModel()
             {
-                Id = 1,
             };
 
-            GameData gameData = new GameData
+            GameDataModel gameData = new GameDataModel
             {
                 MapId = map.Id,
                 Tank1Id = tank1.Id,

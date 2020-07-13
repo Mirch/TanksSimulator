@@ -6,12 +6,12 @@ using TanksSimulator.Game.Utils;
 
 namespace TanksSimulator.Game.Events
 {
-    public class TankTurretRepairingEvent : Event
+    public class TankBarrelRepairingEvent : Event
     {
         private Tank _tank;
         private uint _remainingTurns;
 
-        public TankTurretRepairingEvent(Tank tank, uint turns)
+        public TankBarrelRepairingEvent(Tank tank, uint turns)
         {
             _tank = tank;
             _remainingTurns = turns;
@@ -22,14 +22,14 @@ namespace TanksSimulator.Game.Events
 
             if (_remainingTurns == 0)
             {
-                _tank.Turret.Repair();
-                logger.Log($"{_tank.Name}'s turret is repaired.");
+                _tank.Barrel.Repair();
+                logger.Log($"{_tank.Name}'s barrel is repaired.");
                 return EventResult.Succeeded;
             }
 
-            logger.Log($"{_tank.Name}'s turret is being repaired. {_remainingTurns} turn(s) remaining.");
+            logger.Log($"{_tank.Name}'s barrel is being repaired. {_remainingTurns} turn(s) remaining.");
             var resultEvent = new EventResult();
-            resultEvent.ChainEvent = new TankTurretRepairingEvent(_tank, _remainingTurns - 1);
+            resultEvent.ChainEvent = new TankBarrelRepairingEvent(_tank, _remainingTurns - 1);
             return resultEvent;
         }
     }

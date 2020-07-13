@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MongoDB.Driver;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,19 +9,37 @@ namespace TanksSimulator.WebApi.Data
 {
     public class GameDataRepository
     {
-        private List<GameData> _gameData;
+        private readonly IMongoCollection<GameDataModel> _gameData;
 
-        public GameData Get(int id)
+        public GameDataRepository(
+            IMongoDatabase database,
+            ITanksSimulatorDbSettings databaseSettings)
         {
-            return _gameData[id];
+            _gameData = database.GetCollection<GameDataModel>(databaseSettings.TanksCollection);
         }
 
-        public GameData Insert(GameData gameData)
+        public async Task<List<GameDataModel>> GetAsync()
         {
-            gameData.Id = _gameData.Count;
-            _gameData.Add(gameData);
+            var result = await _gameData
+                .FindAsync(data => true);
 
-            return gameData;
+            return result.ToList();
+        }
+
+        public async Task<GameDataModel> GetByIdAsync(string id)
+        {
+            var result = await _gameData
+                .Find(data => data.Id == id)
+                .SingleAsync();
+
+            return result;
+        }
+
+        public async Task<GameDataModel> UpdateAsync(GameDataModel model)
+        {
+            await _gameData.ReplaceOneAsync(data => data.Id == model.Id, model);
+
+            return model;
         }
     }
 }

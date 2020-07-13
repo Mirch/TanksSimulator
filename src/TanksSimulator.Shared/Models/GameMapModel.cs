@@ -6,7 +6,8 @@ namespace TanksSimulator.Shared.Models
 {
     public class GameMapModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
+        public int Size { get; set; }
         public string Tiles { get; set; }
     }
 }

@@ -14,6 +14,11 @@ namespace TanksSimulator.Game.Entities.Tank
             }
         }
 
+        public TankComponent()
+        {
+            Armor = 100;
+        }
+
         public virtual void GetHit(double damage)
         {
             Armor -= damage;
@@ -22,21 +27,24 @@ namespace TanksSimulator.Game.Entities.Tank
 
     public class TankRoadWheels : TankComponent
     {
+        public TankRoadWheels()
+            : base()
+        {
+        }
     }
 
-    public class TankTurret : TankComponent
+    public class TankBarrel : TankComponent
     {
         public double Range { get; private set; }
         public double Damage { get; private set; }
         public double Accuracy { get; private set; }
 
-        public TankTurret(TankTurretModel model)
+        public TankBarrel(TankBarrelModel model)
+            : base()
         {
             Range = model.Range;
             Damage = model.Damage;
             Accuracy = model.Accuracy;
-
-            Armor = 100;
         }
 
         public void Repair()
@@ -47,5 +55,9 @@ namespace TanksSimulator.Game.Entities.Tank
 
     public class TankMainBody : TankComponent
     {
+        public TankMainBody()
+            : base()
+        {
+        }
     }
 }
