@@ -5,6 +5,7 @@ using TanksSimulator.Game.Map;
 using TanksSimulator.Shared.Models;
 using TanksSimulator.WebApi.Controllers.Simulator.Models;
 using TanksSimulator.WebApi.Data;
+using TanksSimulator.WebApi.Services;
 
 namespace TanksSimulator.WebApi.Controllers.Simulator
 {
@@ -12,38 +13,20 @@ namespace TanksSimulator.WebApi.Controllers.Simulator
     [ApiController]
     public class SimulatorController : ControllerBase
     {
-        private readonly GameDataRepository _gameDataRepository;
+        private readonly GameSimulatorService _gameSimulator;
 
         public SimulatorController(
-            GameDataRepository gameDataRepository)
+            GameSimulatorService gameSimulator)
         {
-            _gameDataRepository = gameDataRepository;
+            _gameSimulator = gameSimulator;
         }
 
         [HttpPost]
         public async Task<IActionResult> Simulate([FromBody] SimulateApiRequestModel request)
         {
-            TankModel tank1 = new TankModel(); // from request
-            TankModel tank2 = new TankModel(); // from request
-            GameMapModel map = new GameMapModel()
-            {
-                Id = 1,
-            };
+            var result = _gameSimulator.Simulate();
 
-            GameData gameData = new GameData
-            {
-                MapId = map.Id,
-                Tank1Id = tank1.Id,
-                Tank2Id = tank2.Id
-            };
-
-            _gameDataRepository.Insert(gameData);
-
-            GameSimulator simulator = new GameSimulator(map);
-
-            simulator.Start(tank1, tank2); // in a thread
-
-            return Ok(gameData);
+            return Ok(result);
         }
     }
 }

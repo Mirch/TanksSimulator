@@ -13,7 +13,8 @@ namespace TanksSimulator.Game
     public class GameSimulator
     {
         //Game loop
-        private bool _running = false;
+        public bool Running { get; private set; }
+        public event EventHandler GameFinished;
         private Thread _gameThread;
 
         //Game logic
@@ -21,15 +22,20 @@ namespace TanksSimulator.Game
         private GameMap _map;
 
         //Utils
+        public Logger Logger { get; }
         private Random _random;
-        private Logger _logger;
 
         public GameSimulator(
             GameMapModel map)
         {
             _random = new Random();
-            _logger = new Logger();
+            Logger = new Logger();
             //TODO: build map
+        }
+
+        private void OnGameFinished()
+        {
+            GameFinished?.Invoke(this, null);
         }
 
         public void Start(
@@ -46,23 +52,25 @@ namespace TanksSimulator.Game
             _tanks.Add(tankEntity2);
 
             _gameThread = new Thread(() => Run());
-            _logger.Log("Starting the simulation...");
+            Logger.Log("Starting the simulation...");
             _gameThread.Start();
         }
 
         private void Run()
         {
+            Running = true;
+
             uint turn = 1; // keeping track of the game's turns
             var actingTank = _random.Next(_tanks.Count); // the index of the tank that is acting this turn
 
             var chainedEvents = new List<Event>(); // events triggered from last turn
 
-            while (_running)
+            while (Running)
             {
-                chainedEvents.ForEach(c => c.Process(_logger)); // processing events from last turn before acting this turn
+                chainedEvents.ForEach(c => c.Process(Logger)); // processing events from last turn before acting this turn
 
                 var resultEvent = _tanks[actingTank].Act();
-                var result = resultEvent.Process(_logger);
+                var result = resultEvent.Process(Logger);
                 if (result != EventResult.Succeeded)
                 {
                     chainedEvents.Add(result.ChainEvent);
@@ -70,13 +78,14 @@ namespace TanksSimulator.Game
 
                 if (_tanks.Any(t => t.IsDestroyed))
                 {
-                    _running = false;
+                    Running = false;
                     break;
                 }
 
                 actingTank = (actingTank + 1) % _tanks.Count; // changing the turn
                 turn++;
             }
+            OnGameFinished();
         }
 
         private Tank BuildTank(TankModel tankModel)
