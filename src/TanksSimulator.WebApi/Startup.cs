@@ -49,7 +49,7 @@ namespace TanksSimulator.WebApi
             services.AddScoped<TanksRepository>();
             services.AddScoped<MapsRepository>();
 
-            services.AddScoped<GameSimulatorService>();
+            services.AddTransient<GameSimulatorService>();
 
             services.AddControllers();
 

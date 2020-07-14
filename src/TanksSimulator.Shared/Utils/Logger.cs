@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TanksSimulator.Game.Utils
+namespace TanksSimulator.Shared.Utils
 {
     public class Logger
     {
         private List<string> _logs;
 
-        public Logger()
+        private string _gameId;
+
+        public Logger(string gameId)
         {
+            _gameId = gameId;
             _logs = new List<string>();
         }
 

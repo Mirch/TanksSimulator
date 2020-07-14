@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using TanksSimulator.Game.Entities.Tank;
+﻿using TanksSimulator.Game.Entities.Tank;
 using TanksSimulator.Game.Utils;
+using TanksSimulator.Shared.Utils;
 
 namespace TanksSimulator.Game.Events
 {

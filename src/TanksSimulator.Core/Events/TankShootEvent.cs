@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using TanksSimulator.Game.Entities.Tank;
-using TanksSimulator.Game.Utils;
+using TanksSimulator.Shared.Utils;
 
 namespace TanksSimulator.Game.Events
 {

@@ -44,7 +44,14 @@ namespace TanksSimulator.WebApi.Data
 
         public async Task<GameDataModel> UpdateAsync(GameDataModel model)
         {
-            await _gameData.ReplaceOneAsync(data => data.Id == model.Id, model);
+            try
+            {
+                await _gameData.ReplaceOneAsync(data => data.Id == model.Id, model);
+            }
+            catch
+            {
+                return model;
+            }
 
             return model;
         }

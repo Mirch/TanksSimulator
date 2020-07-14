@@ -45,9 +45,12 @@ namespace TanksSimulator.Game.Entities.Tank
                 var destination = GetNeighourVisitableTiles()
                     .Where(p => !HasShootingLine(p))
                     .OrderByDescending(p => p.DistanceTo(Enemy.Position))
-                    .First();
+                    .FirstOrDefault();
 
-                return new TankMoveEvent(this, destination - Position);
+                if (destination != null)
+                {
+                    return new TankMoveEvent(this, destination - Position);
+                }
             }
 
             if (CanShoot && HasShootingLine(Position)) // if it can shoot, shoot
@@ -77,7 +80,7 @@ namespace TanksSimulator.Game.Entities.Tank
             foreach (var coords in collidingTiles)
             {
                 var tile = GameMap.GetTile(coords);
-                if (tile.Solid)
+                if (tile != null && tile.Solid)
                 {
                     return false;
                 }

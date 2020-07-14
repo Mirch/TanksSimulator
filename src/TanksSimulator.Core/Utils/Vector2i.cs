@@ -34,6 +34,16 @@ namespace TanksSimulator.Game.Utils
             return result;
         }
 
+        public static bool operator ==(Vector2i left, Vector2i right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(Vector2i left, Vector2i right)
+        {
+            return !Equals(left, right);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj.GetType() != typeof(Vector2i))
@@ -43,6 +53,11 @@ namespace TanksSimulator.Game.Utils
 
             var other = (Vector2i)obj;
             return X == other.X && Y == other.Y;
+        }
+
+        public override int GetHashCode()
+        {
+            return X ^ Y;
         }
 
     }

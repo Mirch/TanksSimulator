@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Transactions;
 using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
 
@@ -45,13 +46,15 @@ namespace TanksSimulator.Game.Map
         {
             var openList = new List<Node>();
             var closedList = new List<Node>();
+
             var current = new Node(start, null, 0, start.DistanceTo(goal));
 
             openList.Add(current);
             while (openList.Count > 0)
             {
-                openList.Sort();
-                current = openList[0];
+                current = openList
+                    .OrderBy(n => n.FCost)
+                    .First();
                 if (current.Position.Equals(goal))
                 {
                     var path = new List<Node>();
@@ -62,34 +65,42 @@ namespace TanksSimulator.Game.Map
                     }
                     return path;
                 }
+
                 openList.Remove(current);
                 closedList.Add(current);
-
                 for (int i = 0; i < 9; i++)
                 {
-                    if (i == 4) // current tile
-                    {
-                        continue;
-                    }
+
                     var deltapos = new Vector2i { X = (i % 3) - 1, Y = (i / 3) - 1 };
                     var newPos = current.Position + deltapos;
-                    Tile at = GetTile(newPos);
+                    var at = GetTile(newPos);
                     if (at == null || at.Solid)
                     {
                         continue;
                     }
-                    var gCost = current.GCost + current.Position.DistanceTo(newPos);
-                    var hCost = newPos.DistanceTo(goal);
 
-                    Node node = new Node(newPos, current, gCost, hCost);
-                    if (closedList.Any(n => n.Position == newPos) && gCost >= current.GCost)
+                    if (closedList.Any(n => n.Position == newPos))
                     {
                         continue;
                     }
-                    if (!openList.Any(n => n.Position == newPos) || gCost < current.GCost)
+
+                    var gCost = current.GCost + current.Position.DistanceTo(newPos);
+                    var hCost = newPos.DistanceTo(goal);
+
+                    var node = new Node(newPos, current, gCost, hCost);
+
+                    var existingNode = openList.SingleOrDefault(n => n.Position == newPos);
+
+                    if (existingNode == null)
                     {
                         openList.Add(node);
                     }
+                    else if (existingNode != null && node.GCost < existingNode.GCost)
+                    {
+                        existingNode.Parent = current;
+                        existingNode.GCost = gCost;
+                    }
+
                 }
             }
             return null;

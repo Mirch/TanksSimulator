@@ -8,18 +8,18 @@ namespace TanksSimulator.Game.Map
     public class Node : IComparable
     {
         public Vector2i Position { get; private set; }
-        public Node Parent { get; private set; }
+        public Node Parent { get; set; }
 
         public double FCost { get { return GCost + HCost; } }
-        public double GCost { get; private set; }
-        public double HCost { get; private set; }
+        public double GCost { get; set; }
+        public double HCost { get; set; }
 
-        public Node(Vector2i tile, Node parent, double gCost, double hCost)
+        public Node(Vector2i position, Node parent, double gCost, double hCost)
         {
-            Position = tile;
+            Position = position;
             Parent = parent;
             GCost = gCost;
-            HCost = HCost;
+            HCost = hCost;
         }
 
         public int CompareTo(object obj)
@@ -30,10 +30,12 @@ namespace TanksSimulator.Game.Map
                 throw new ArgumentException("Object is not a Node.");
             }
 
-            if (other.FCost < FCost) return 1;
-            if (other.FCost > FCost) return -1;
+            return FCost.CompareTo(other.FCost);
+        }
 
-            return 0;
+        public override string ToString()
+        {
+            return $"({Position.X},{Position.Y})";
         }
     }
 }

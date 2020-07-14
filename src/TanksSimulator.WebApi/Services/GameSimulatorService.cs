@@ -26,14 +26,10 @@ namespace TanksSimulator.WebApi.Services
             _tanksRepository = tanksRepository;
         }
 
-        private async void SaveGameLogs(object sender, GameFinishedEventArgs e)
+        private async void OnGameFinished(object sender, GameFinishedEventArgs e)
         {
-            var logger = (sender as GameSimulator).Logger;
-            var logs = logger.GetLogs();
-
             var gameData = await _gameDataRepository.GetByIdAsync(e.GameId);
 
-            gameData.Logs = logs;
             gameData.WinnerId = e.WinnerTankId;
             gameData.Status = GameStatus.Finished;
 
@@ -45,12 +41,12 @@ namespace TanksSimulator.WebApi.Services
             var gameData = await _gameDataRepository.GetByIdAsync(gameId);
 
             GameSimulator simulator = new GameSimulator(gameData.Id, gameData.GameMapModel);
-            simulator.GameFinished += SaveGameLogs;
-
-            simulator.Start(gameData.TankModel1, gameData.TankModel2);
-
+            simulator.GameFinished += OnGameFinished;
+            
             gameData.Status = GameStatus.InProgress;
             await _gameDataRepository.UpdateAsync(gameData);
+
+            simulator.Start(gameData.TankModel1, gameData.TankModel2);
 
             return gameData;
         }

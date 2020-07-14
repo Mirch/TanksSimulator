@@ -31,12 +31,12 @@ namespace TanksSimulator.Game
         private Random _random;
 
         public GameSimulator(
-            string gameiId,
+            string gameId,
             GameMapModel map)
         {
-            _gameId = gameiId;
+            _gameId = gameId;
 
-            Logger = new Logger();
+            Logger = new Logger(gameId);
             _random = new Random();
 
             _tanks = new List<Tank>();
@@ -68,8 +68,8 @@ namespace TanksSimulator.Game
             _tanks.Add(tankEntity1);
             _tanks.Add(tankEntity2);
 
-            _gameThread = new Thread(() => Run());
             Logger.Log("Starting the simulation...");
+            _gameThread = new Thread(() => Run());
             _gameThread.Start();
         }
 
@@ -84,6 +84,7 @@ namespace TanksSimulator.Game
 
             while (Running)
             {
+                Logger.Log($"--- Turn {_turns}: ---");
                 chainedEvents.ForEach(c => c.Process(Logger)); // processing events from last turn before acting this turn
 
                 var resultEvent = _tanks[actingTank].Act();
