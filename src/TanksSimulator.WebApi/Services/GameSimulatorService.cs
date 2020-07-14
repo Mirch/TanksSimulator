@@ -29,7 +29,7 @@ namespace TanksSimulator.WebApi.Services
         private async void SaveGameLogs(object sender, GameFinishedEventArgs e)
         {
             var logger = (sender as GameSimulator).Logger;
-            var logs = logger.Flush();
+            var logs = logger.GetLogs();
 
             var gameData = await _gameDataRepository.GetByIdAsync(e.GameId);
 

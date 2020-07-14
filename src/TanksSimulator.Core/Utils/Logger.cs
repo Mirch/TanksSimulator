@@ -6,21 +6,21 @@ namespace TanksSimulator.Game.Utils
 {
     public class Logger
     {
-        private StringBuilder _builder;
+        private List<string> _logs;
 
         public Logger()
         {
-            _builder = new StringBuilder();
+            _logs = new List<string>();
         }
 
         public void Log(string message)
         {
-            _builder.Append(message).Append('\n');
+            _logs.Add(message);
         }
 
-        public string Flush()
+        public List<string> GetLogs()
         {
-            return _builder.ToString();
+            return _logs;
         }
     }
 }

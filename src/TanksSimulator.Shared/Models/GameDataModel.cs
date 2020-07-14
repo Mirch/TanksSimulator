@@ -20,6 +20,6 @@ namespace TanksSimulator.Shared.Models
         public GameMapModel GameMapModel { get; set; }
 
         public string WinnerId { get; set; }
-        public string Logs { get; set; }
+        public IEnumerable<string> Logs { get; set; }
     }
 }

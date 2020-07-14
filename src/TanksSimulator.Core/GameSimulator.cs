@@ -113,7 +113,15 @@ namespace TanksSimulator.Game
                 X = _random.Next(_map.Size),
                 Y = _random.Next(_map.Size)
             };
-            Logger.Log($"Placing {tankModel.Name} at ({position.X}, {position.Y}.)");
+            while (_map.GetTile(position).Solid)
+            {
+                position = new Vector2i()
+                {
+                    X = _random.Next(_map.Size),
+                    Y = _random.Next(_map.Size)
+                };
+            }
+            Logger.Log($"Placing {tankModel.Name} at ({position.X}, {position.Y}).");
             return new Tank(tankModel.Id, tankModel, position, _map);
         }
     }
