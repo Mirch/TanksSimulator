@@ -28,8 +28,12 @@ namespace TanksSimulator.WebApi.Services
 
         private async void OnGameFinished(object sender, GameFinishedEventArgs e)
         {
+            var logger = (sender as GameSimulator).Logger;
+            var logs = logger.GetLogs();
+
             var gameData = await _gameDataRepository.GetByIdAsync(e.GameId);
 
+            gameData.Logs = logs;
             gameData.WinnerId = e.WinnerTankId;
             gameData.Status = GameStatus.Finished;
 
