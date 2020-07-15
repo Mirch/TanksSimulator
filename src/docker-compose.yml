@@ -1,18 +1,26 @@
 version: '3.8'
 services:
   web:
-    build: ./TanksSimulator.WebApi
+    build: 
+      context: .
+      dockerfile: TanksSimulator.WebApi/Dockerfile
     ports:
     - "80:80"
   weather:
-    build: ./TanksSimulator.WeatherApi
+    build:
+      context: .
+      dockerfile: TanksSimulator.WeatherApi/Dockerfile
     ports:
     - "80:8000"
   data:
-    build: ./TanksSimulator.DataApi
+    build: 
+      context: .
+      dockerifle: TanksSimulator.DataApi/Dockerfile
     ports:
     - "80:8001"
   results:
-    build: ./TanksSimulator.ResultsApi
+    build: 
+      context: .
+      dockerfile: TanksSimulator.ResultsApi/Dockerfile
     ports:
     - "80:8002"
