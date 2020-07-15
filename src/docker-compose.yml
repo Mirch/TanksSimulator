@@ -2,17 +2,17 @@ version: '3.8'
 services:
   web:
     build: ./TanksSimulator.WebApi
-      ports:
-	  - "80:80"
+    ports:
+	- "80:80"
   weather:
 	build: ./TanksSimulator.WeatherApi
-      ports:
-	  - "80:8000"
+    ports:
+	- "80:8000"
   data:
     build: ./TanksSimulator.DataApi
-      ports:
-	  - "80:8001"
+    ports:
+	- "80:8001"
   results:
     build: ./TanksSimulator.ResultsApi
-      ports:
-	  - "80:8002"
+    ports:
+	- "80:8002"
