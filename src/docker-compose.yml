@@ -2,11 +2,11 @@ version: '3.8'
 services:
   web:
     build: ./TanksSimulator.WebApi
-	  ports:
+      ports:
 	  - "80:80"
   weather:
 	build: ./TanksSimulator.WeatherApi
-	  ports:
+      ports:
 	  - "80:8000"
   data:
     build: ./TanksSimulator.DataApi
