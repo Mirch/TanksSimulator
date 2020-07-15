@@ -86,7 +86,9 @@ namespace TanksSimulator.Game
             {
                 Logger.Log($"--- Turn {_turns}: ---");
                 chainedEvents.ForEach(c => c.Process(Logger)); // processing events from last turn before acting this turn
+                chainedEvents.Clear();
 
+                // This turn's action, as well as its consequences (chained events)
                 var resultEvent = _tanks[actingTank].Act();
                 var result = resultEvent.Process(Logger);
                 if (result != EventResult.Succeeded)
@@ -94,6 +96,7 @@ namespace TanksSimulator.Game
                     chainedEvents.Add(result.ChainEvent);
                 }
 
+                // Win condition
                 if (_tanks.Any(t => t.IsDestroyed))
                 {
                     Running = false;
@@ -101,7 +104,8 @@ namespace TanksSimulator.Game
                     break;
                 }
 
-                actingTank = (actingTank + 1) % _tanks.Count; // changing the turn
+                // Changing the turn
+                actingTank = (actingTank + 1) % _tanks.Count; 
                 _turns++;
             }
             OnGameFinished();
@@ -114,7 +118,7 @@ namespace TanksSimulator.Game
                 X = _random.Next(_map.Size),
                 Y = _random.Next(_map.Size)
             };
-            while (_map.GetTile(position).Solid)
+            while (_map.GetTile(position).Solid) // finding an available tile
             {
                 position = new Vector2i()
                 {

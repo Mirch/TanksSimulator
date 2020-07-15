@@ -12,14 +12,14 @@ namespace TanksSimulator.WebApi.Services
 {
     public class GameSimulatorService
     {
-        private readonly GameDataRepository _gameDataRepository;
-        private readonly MapsRepository _mapsRepository;
-        private readonly TanksRepository _tanksRepository;
+        private readonly IRepository<GameDataModel> _gameDataRepository;
+        private readonly IRepository<GameMapModel> _mapsRepository;
+        private readonly IRepository<TankModel> _tanksRepository;
 
         public GameSimulatorService(
-            GameDataRepository gameDataRepository,
-            MapsRepository mapsRepository,
-            TanksRepository tanksRepository)
+            IRepository<GameDataModel> gameDataRepository,
+            IRepository<GameMapModel> mapsRepository,
+            IRepository<TankModel> tanksRepository)
         {
             _gameDataRepository = gameDataRepository;
             _mapsRepository = mapsRepository;
