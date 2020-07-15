@@ -33,6 +33,7 @@ namespace TanksSimulator.Game
 
         public GameSimulator(
             string gameId,
+            string weatherApiUri,
             GameMapModel map)
         {
             _gameId = gameId;
@@ -43,7 +44,7 @@ namespace TanksSimulator.Game
             _tanks = new List<Tank>();
             _map = new GameMap(map);
 
-            _weatherApiClient = new WeatherApiClient();
+            _weatherApiClient = new WeatherApiClient(weatherApiUri);
         }
 
         private void OnGameFinished()

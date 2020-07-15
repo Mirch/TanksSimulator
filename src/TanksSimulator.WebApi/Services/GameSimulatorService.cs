@@ -37,7 +37,7 @@ namespace TanksSimulator.WebApi.Services
         {
             var gameData = await _resultsApiClient.GetScoreAsync(gameId);
 
-            GameSimulator simulator = new GameSimulator(gameData.Id, gameData.GameMapModel);
+            GameSimulator simulator = new GameSimulator(gameData.Id, Environment.GetEnvironmentVariable("WEATHER_API_URL"), gameData.GameMapModel);
             simulator.GameFinished += OnGameFinished;
 
             gameData.Status = GameStatus.InProgress;

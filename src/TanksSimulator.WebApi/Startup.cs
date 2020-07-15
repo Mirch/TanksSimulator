@@ -31,12 +31,12 @@ namespace TanksSimulator.WebApi
         {
             services.AddHttpClient<DataApiClient>(c =>
             {
-                c.BaseAddress = new Uri("http://localhost:8002"); // todo: change
+                c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("DATA_API_URL")); 
             });
 
             services.AddHttpClient<ResultsApiClient>(c =>
             {
-                c.BaseAddress = new Uri("http://localhost:8003"); // todo: change
+                c.BaseAddress = new Uri(Environment.GetEnvironmentVariable("RESULTS_API_URL"));
             });
 
             services.AddTransient<GameSimulatorService>();

@@ -11,10 +11,10 @@ namespace TanksSimulator.Game.Utils
     {
         private readonly HttpClient _client;
 
-        public WeatherApiClient()
+        public WeatherApiClient(string uri)
         {
-            _client = new HttpClient(); 
-            _client.BaseAddress = new Uri("http://localhost:8001");
+            _client = new HttpClient();
+            _client.BaseAddress = new Uri(uri);
         }
 
         public async Task<string> GetWeatherAsync()

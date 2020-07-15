@@ -1,13 +1,5 @@
 version: '2.0'
 services:
-  web:
-    build: 
-      context: .
-      dockerfile: TanksSimulator.WebApi/Dockerfile
-    ports:
-    - "8080:80"
-    networks:
-    - tanks-network
   weather:
     build:
       context: .
@@ -32,6 +24,18 @@ services:
     - "8003:80"
     networks:
     - tanks-network
+  web:
+    build: 
+      context: .
+      dockerfile: TanksSimulator.WebApi/Dockerfile
+    ports:
+    - "8080:80"
+    networks:
+    - tanks-network
+    environment:
+    - WEATHER_API_URL=http://weather:8001
+    - DATA_API_URL=http://data:8002
+    - RESULT_API_URL=http://results:8003
 
 networks:
   tanks-network:
