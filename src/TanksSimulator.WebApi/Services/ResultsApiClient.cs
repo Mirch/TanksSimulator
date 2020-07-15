@@ -41,7 +41,7 @@ namespace TanksSimulator.WebApi.Services
 
         public async Task<GameDataModel> CreateAsync(GameDataModel model)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(new GameDataApiResponseModel(model)), Encoding.UTF8, "application/json");
+            var content = new StringContent(JsonConvert.SerializeObject(new GameDataApiRequestModel(model)), Encoding.UTF8, "application/json");
 
             var response = await _client.PostAsync($"/api/score/", content);
             var responseContent = await response.Content.ReadAsStringAsync();
