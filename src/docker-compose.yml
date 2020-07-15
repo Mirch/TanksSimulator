@@ -15,14 +15,16 @@ services:
     ports:
     - "8001:80"
     networks:
-    - tanks-network  data:
+    - tanks-network  
+  data:
     build: 
       context: .
       dockerfile: TanksSimulator.DataApi/Dockerfile
     ports:
     - "8002:80"
     networks:
-    - tanks-network  results:
+    - tanks-network  
+  results:
     build: 
       context: .
       dockerfile: TanksSimulator.ResultsApi/Dockerfile
