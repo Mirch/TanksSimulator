@@ -7,7 +7,7 @@ using TanksSimulator.Shared.Models;
 
 namespace TanksSimulator.WebApi.Data
 {
-    public class GameDataRepository
+    public class GameDataRepository : IRepository<GameDataModel>
     {
         private readonly IMongoCollection<GameDataModel> _gameData;
 
@@ -44,15 +44,8 @@ namespace TanksSimulator.WebApi.Data
 
         public async Task<GameDataModel> UpdateAsync(GameDataModel model)
         {
-            try
-            {
-                await _gameData.ReplaceOneAsync(data => data.Id == model.Id, model);
-            }
-            catch
-            {
-                return model;
-            }
-
+            await _gameData.ReplaceOneAsync(data => data.Id == model.Id, model);
+            
             return model;
         }
     }

@@ -9,14 +9,15 @@ using TanksSimulator.WebApi.Data;
 
 namespace TanksSimulator.WebApi.Controllers.Tanks
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{apiVersion:apiVersion}/[controller]")]
     public class TanksController : ControllerBase
     {
-        private readonly TanksRepository _tanksRepository;
+        private readonly IRepository<TankModel> _tanksRepository;
 
         public TanksController(
-            TanksRepository tanksRepository)
+            IRepository<TankModel> tanksRepository)
         {
             _tanksRepository = tanksRepository;
         }
@@ -30,9 +31,9 @@ namespace TanksSimulator.WebApi.Controllers.Tanks
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var result = _tanksRepository.GetByIdAsync(id);
+            var result = await _tanksRepository.GetByIdAsync(id);
 
             if (result == null)
             {

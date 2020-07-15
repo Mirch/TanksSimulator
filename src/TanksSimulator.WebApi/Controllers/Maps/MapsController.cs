@@ -4,18 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TanksSimulator.Shared.Models;
 using TanksSimulator.WebApi.Data;
 
 namespace TanksSimulator.WebApi.Controllers.Maps
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{apiVersion:apiVersion}/[controller]")]
     public class MapsController : ControllerBase
     {
-        private readonly MapsRepository _mapsRepository;
+        private readonly IRepository<GameMapModel> _mapsRepository;
 
         public MapsController(
-            MapsRepository mapsRepository)
+            IRepository<GameMapModel> mapsRepository)
         {
             _mapsRepository = mapsRepository;
         }
@@ -29,9 +31,9 @@ namespace TanksSimulator.WebApi.Controllers.Maps
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetById(string id)
+        public async Task<IActionResult> GetById(string id)
         {
-            var result = _mapsRepository.GetByIdAsync(id);
+            var result = await _mapsRepository.GetByIdAsync(id);
 
             if (result == null)
             {

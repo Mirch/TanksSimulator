@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using TanksSimulator.Shared.Models;
 using TanksSimulator.WebApi.Data;
 using TanksSimulator.WebApi.Services;
 
@@ -45,13 +46,20 @@ namespace TanksSimulator.WebApi
             services.AddSingleton<ITanksSimulatorDbSettings>(sp =>
                 sp.GetRequiredService<IOptions<TanksSimulatorDbSettings>>().Value);
 
-            services.AddScoped<GameDataRepository>();
-            services.AddScoped<TanksRepository>();
-            services.AddScoped<MapsRepository>();
+            services.AddScoped<IRepository<GameDataModel>, GameDataRepository>();
+            services.AddScoped<IRepository<TankModel>, TanksRepository>();
+            services.AddScoped<IRepository<GameMapModel>, MapsRepository>();
 
             services.AddTransient<GameSimulatorService>();
 
             services.AddControllers();
+
+            services.AddApiVersioning(x =>
+            {
+                x.DefaultApiVersion = new ApiVersion(1, 0);
+                x.AssumeDefaultVersionWhenUnspecified = true;
+                x.ReportApiVersions = true;
+            });
 
             services.AddSwaggerGen();
         }

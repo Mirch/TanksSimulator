@@ -4,18 +4,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TanksSimulator.Shared.Models;
+using TanksSimulator.WebApi.Controllers.Simulator.Models;
 using TanksSimulator.WebApi.Data;
 
-namespace TanksSimulator.WebApi.Controllers.Score
+namespace TanksSimulator.WebApi.Controllers.Simulator
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{apiVersion:apiVersion}/[controller]")]
     public class ScoreController : ControllerBase
     {
-        private readonly GameDataRepository _gameDataRepository;
+        private readonly IRepository<GameDataModel> _gameDataRepository;
 
         public ScoreController(
-            GameDataRepository gameDataRepository)
+            IRepository<GameDataModel> gameDataRepository)
         {
             _gameDataRepository = gameDataRepository;
         }
@@ -23,14 +26,15 @@ namespace TanksSimulator.WebApi.Controllers.Score
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _gameDataRepository
-                .GetAsync();
+            var result = (await _gameDataRepository
+                .GetAsync())
+                .Select(d => new GameDataApiResponseModel(d));
 
             return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAll(string id)
+        public async Task<IActionResult> Get(string id)
         {
             var result = await _gameDataRepository
                 .GetByIdAsync(id);
@@ -40,7 +44,7 @@ namespace TanksSimulator.WebApi.Controllers.Score
                 return NotFound(new { error = "Could not find any data for this battle." });
             }
 
-            return Ok(result);
+            return Ok(new GameDataApiResponseModel(result));
         }
 
     }

@@ -10,21 +10,22 @@ using TanksSimulator.WebApi.Services;
 
 namespace TanksSimulator.WebApi.Controllers.Simulator
 {
-    [Route("api/simulate")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{apiVersion:apiVersion}/simulate")]
     public class SimulatorController : ControllerBase
     {
         private readonly GameSimulatorService _gameSimulator;
-        private readonly GameDataRepository _gameDataRepository;
-        private readonly TanksRepository _tanksRepository;
-        private readonly MapsRepository _mapsRepository;
+        private readonly IRepository<GameDataModel> _gameDataRepository;
+        private readonly IRepository<TankModel> _tanksRepository;
+        private readonly IRepository<GameMapModel> _mapsRepository;
 
 
         public SimulatorController(
             GameSimulatorService gameSimulator,
-            GameDataRepository gameDataRepository,
-            TanksRepository tanksRepository,
-            MapsRepository mapsRepository)
+            IRepository<GameDataModel> gameDataRepository,
+            IRepository<TankModel> tanksRepository,
+            IRepository<GameMapModel> mapsRepository)
         {
             _gameSimulator = gameSimulator;
             _gameDataRepository = gameDataRepository;
@@ -57,7 +58,7 @@ namespace TanksSimulator.WebApi.Controllers.Simulator
 
             var result = await _gameSimulator.SimulateAsync(gameData.Id);
 
-            return Ok(gameData);
+            return Ok(new GameDataApiResponseModel(result));
         }
     }
 }

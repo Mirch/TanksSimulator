@@ -6,7 +6,7 @@ using TanksSimulator.Shared.Models;
 
 namespace TanksSimulator.WebApi.Data
 {
-    public class TanksRepository
+    public class TanksRepository : IRepository<TankModel>
     {
         private readonly IMongoCollection<TankModel> _tanks;
 
@@ -32,6 +32,20 @@ namespace TanksSimulator.WebApi.Data
                 .SingleAsync();
 
             return result;
+        }
+        
+        public async Task<TankModel> CreateAsync(TankModel model)
+        {
+            await _tanks.InsertOneAsync(model);
+
+            return model;
+        }
+
+        public async Task<TankModel> UpdateAsync(TankModel model)
+        {
+            await _tanks.ReplaceOneAsync(tank => tank.Id == model.Id, model);
+
+            return model;
         }
     }
 }

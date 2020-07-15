@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TanksSimulator.Game.Map;
 using TanksSimulator.Shared.Models;
 
 namespace TanksSimulator.WebApi.Data
 {
-    public class MapsRepository
+    public class MapsRepository : IRepository<GameMapModel>
     {
         private readonly IMongoCollection<GameMapModel> _maps;
 
@@ -33,6 +34,19 @@ namespace TanksSimulator.WebApi.Data
                 .SingleAsync();
 
             return result;
+        }
+        public async Task<GameMapModel> CreateAsync(GameMapModel model)
+        {
+            await _maps.InsertOneAsync(model);
+
+            return model;
+        }
+
+        public async Task<GameMapModel> UpdateAsync(GameMapModel model)
+        {
+            await _maps.ReplaceOneAsync(map => map.Id == model.Id, model);
+
+            return model;
         }
     }
 }
