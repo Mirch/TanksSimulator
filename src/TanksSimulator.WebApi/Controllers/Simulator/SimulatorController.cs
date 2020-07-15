@@ -16,36 +16,33 @@ namespace TanksSimulator.WebApi.Controllers.Simulator
     public class SimulatorController : ControllerBase
     {
         private readonly GameSimulatorService _gameSimulator;
-        private readonly IRepository<GameDataModel> _gameDataRepository;
-        private readonly IRepository<TankModel> _tanksRepository;
-        private readonly IRepository<GameMapModel> _mapsRepository;
+        private readonly ResultsApiClient _resultsApiClient;
+        private readonly DataApiClient _dataApiClient;
 
 
         public SimulatorController(
             GameSimulatorService gameSimulator,
-            IRepository<GameDataModel> gameDataRepository,
-            IRepository<TankModel> tanksRepository,
-            IRepository<GameMapModel> mapsRepository)
+            ResultsApiClient resultsApiClient,
+            DataApiClient dataApiClient)
         {
             _gameSimulator = gameSimulator;
-            _gameDataRepository = gameDataRepository;
-            _tanksRepository = tanksRepository;
-            _mapsRepository = mapsRepository;
+            _resultsApiClient = resultsApiClient;
+            _dataApiClient = dataApiClient;
         }
 
         [HttpPost]
         public async Task<IActionResult> Simulate([FromBody] SimulateApiRequestModel request)
         {
-            var tank1 = await _tanksRepository.GetByIdAsync(request.Tanks[0]);
-            var tank2 = await _tanksRepository.GetByIdAsync(request.Tanks[1]);
-            var map = await _mapsRepository.GetByIdAsync(request.MapId);
+            var tank1 = await _dataApiClient.GetTank(request.Tanks[0]);
+            var tank2 = await _dataApiClient.GetTank(request.Tanks[1]);
+            var map = await _dataApiClient.GetMap(request.MapId);
 
             if (tank1 == null || tank2 == null || map == null)
             {
                 return NotFound(new { error = "Wrong tank or map id provided." });
             }
 
-            var gameData = await _gameDataRepository.CreateAsync(new GameDataModel
+            var gameData = await _resultsApiClient.CreateAsync(new GameDataModel
             {
                 Tank1Id = request.Tanks[0],
                 TankModel1 = tank1,

@@ -68,7 +68,15 @@ namespace TanksSimulator.Game.Events
         private double CalculateTankDamage(Tank tank)
         {
             var missChance = _random.Next(100);
-            if (missChance > tank.Barrel.Accuracy)
+            var weather = tank.GameMap.CurrentWeather;
+
+            var accuracy = tank.Barrel.Accuracy;
+            if (weather == "freezing")
+            {
+                accuracy /= 2;
+            }
+
+            if (missChance > accuracy)
             {
                 return 0;
             }

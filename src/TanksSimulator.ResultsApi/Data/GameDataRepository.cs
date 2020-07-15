@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TanksSimulator.ResultsApi.Data;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
 
 namespace TanksSimulator.WebApi.Data

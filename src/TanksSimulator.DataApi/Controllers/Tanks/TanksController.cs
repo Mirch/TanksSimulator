@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
-using TanksSimulator.WebApi.Data;
 
-namespace TanksSimulator.WebApi.Controllers.Tanks
+namespace TanksSimulator.DataApi.Controllers.Tanks
 {
     [ApiController]
-    [ApiVersion("1.0")]
-    [Route("api/v{apiVersion:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     public class TanksController : ControllerBase
     {
         private readonly IRepository<TankModel> _tanksRepository;

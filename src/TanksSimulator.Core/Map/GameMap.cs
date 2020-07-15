@@ -15,6 +15,7 @@ namespace TanksSimulator.Game.Map
     {
         private List<Tile> _tiles;
 
+        public string CurrentWeather { get; set; }
         public List<Entity> Entities { get; private set; }
 
         public int Size { get; private set; }

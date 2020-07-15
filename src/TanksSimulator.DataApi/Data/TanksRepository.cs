@@ -1,10 +1,10 @@
 ﻿using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TanksSimulator.Game.Entities.Tank;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
 
-namespace TanksSimulator.WebApi.Data
+namespace TanksSimulator.DataApi.Data
 {
     public class TanksRepository : IRepository<TankModel>
     {

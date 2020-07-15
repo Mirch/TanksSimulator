@@ -4,14 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
-using TanksSimulator.WebApi.Data;
 
-namespace TanksSimulator.WebApi.Controllers.Maps
+namespace TanksSimulator.DataApi.Controllers.Maps
 {
     [ApiController]
-    [ApiVersion("1.0")]
-    [Route("api/v{apiVersion:apiVersion}/[controller]")]
+    [Route("api/[controller]")]
     public class MapsController : ControllerBase
     {
         private readonly IRepository<GameMapModel> _mapsRepository;

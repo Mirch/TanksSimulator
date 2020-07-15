@@ -29,6 +29,7 @@ namespace TanksSimulator.Game
         //Utils
         public Logger Logger { get; }
         private Random _random;
+        private WeatherApiClient _weatherApiClient;
 
         public GameSimulator(
             string gameId,
@@ -41,6 +42,8 @@ namespace TanksSimulator.Game
 
             _tanks = new List<Tank>();
             _map = new GameMap(map);
+
+            _weatherApiClient = new WeatherApiClient();
         }
 
         private void OnGameFinished()
@@ -73,7 +76,7 @@ namespace TanksSimulator.Game
             _gameThread.Start();
         }
 
-        private void Run()
+        private async void Run()
         {
             Running = true;
 
@@ -85,6 +88,8 @@ namespace TanksSimulator.Game
             while (Running)
             {
                 Logger.Log($"--- Turn {_turns}: ---");
+                _map.CurrentWeather = await _weatherApiClient.GetWeatherAsync();
+                Logger.Log($"It's {_map.CurrentWeather} outsite.");
 
                 // Processing chained events from last turn before acting this turn
                 var eventsToAdd = new List<Event>();

@@ -83,6 +83,14 @@ namespace TanksSimulator.Game.Entities.Tank
 
         private bool HasShootingLine(Vector2i startingPosition)
         {
+            var weather = GameMap.CurrentWeather;
+            var range = Barrel.Range;
+
+            if (weather == "raining")
+            {
+                range /= 2;
+            }
+
             if (startingPosition.DistanceTo(Enemy.Position) > Barrel.Range)
             {
                 return false;

@@ -3,10 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TanksSimulator.Game.Map;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
 
-namespace TanksSimulator.WebApi.Data
+namespace TanksSimulator.DataApi.Data
 {
     public class MapsRepository : IRepository<GameMapModel>
     {

@@ -12,11 +12,11 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using TanksSimulator.DataApi.Data;
+using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
-using TanksSimulator.WebApi.Data;
-using TanksSimulator.WebApi.Services;
 
-namespace TanksSimulator.WebApi
+namespace TanksSimulator.DataApi
 {
     public class Startup
     {
@@ -30,45 +30,34 @@ namespace TanksSimulator.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHttpClient<DataApiClient>(c =>
+            services.Configure<TanksSimulatorDbSettings>(
+               Configuration.GetSection("DatabaseSettings"));
+
+            services.AddScoped<IMongoDatabase>(sp =>
             {
-                c.BaseAddress = new Uri("http://localhost:8080"); // todo: change
+                var databaseSettings = sp.GetRequiredService<IOptions<TanksSimulatorDbSettings>>().Value;
+                var client = new MongoClient(databaseSettings.ConnectionString);
+                var database = client.GetDatabase(databaseSettings.DatabaseName);
+
+                return database;
             });
 
-            services.AddHttpClient<ResultsApiClient>(c =>
-            {
-                c.BaseAddress = new Uri("http://localhost:8080"); // todo: change
-            });
+            services.AddSingleton<ITanksSimulatorDbSettings>(sp =>
+                sp.GetRequiredService<IOptions<TanksSimulatorDbSettings>>().Value);
 
-            services.AddTransient<GameSimulatorService>();
+            services.AddScoped<IRepository<TankModel>, TanksRepository>();
+            services.AddScoped<IRepository<GameMapModel>, MapsRepository>();
 
             services.AddControllers();
-
-            services.AddApiVersioning(x =>
-            {
-                x.DefaultApiVersion = new ApiVersion(1, 0);
-                x.AssumeDefaultVersionWhenUnspecified = true;
-                x.ReportApiVersions = true;
-            });
-
-            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseSwagger();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
 
             app.UseHttpsRedirection();
 
