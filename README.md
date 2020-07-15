@@ -20,7 +20,7 @@ The format of the endpoints is e.g. `api/v1/Maps/{mapId}`. All the endpoints can
 
 ## The actual game
 
-The game simulates a battle between two given tanks, on a given map. The map is saved in the database in text form, sent to the `GameSimulator` and converted into a list of `Tile` object at runtime. Tanks are randomly placed on the map at the beginning of each battle; one of them is randomly chosen to act first, and then they take turns making their moves. The following moves are possible:
+The game simulates a battle between two given tanks, on a given map. The map is saved in the database in text form, sent to the `GameSimulator` and converted into a list of `Tile` objects at runtime. Tanks are randomly placed on the map at the beginning of each battle; one of them is randomly chosen to act first, and then they take turns making their moves. The following moves are possible:
 - Moving one tile in any direction (either towards the opponent using an A* pathfinding algorithm, or somewhere where the opponent can't shoot);
 - Shooting the opponent (randomly between the main tank body, the barrel and the roadwheels);
 
