@@ -15,7 +15,7 @@ services:
   data:
     build: 
       context: .
-      dockerifle: TanksSimulator.DataApi/Dockerfile
+      dockerfile: TanksSimulator.DataApi/Dockerfile
     ports:
     - "80:8001"
   results:
