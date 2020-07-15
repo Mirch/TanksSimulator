@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TanksSimulator.ResultsApi.Controllers.Simulator.Models;
 using TanksSimulator.Shared.Data;
 using TanksSimulator.Shared.Models;
 using TanksSimulator.WebApi.Controllers.Simulator.Models;
