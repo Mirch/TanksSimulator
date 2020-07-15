@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using TanksSimulator.Shared.Models;
-using TanksSimulator.WebApi.Data;
 using TanksSimulator.WebApi.Services;
 
 namespace TanksSimulator.WebApi

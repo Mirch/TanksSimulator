@@ -23,7 +23,7 @@ namespace TanksSimulator.ResultsApi.Controllers.Simulator.Models
         public GameDataApiRequestModel(GameDataModel model)
         {
             Id = model.Id;
-            Status = model.Status.ToString();
+            Status = model.Status;
             Tank1Id = model.Tank1Id;
             Tank2Id = model.Tank2Id;
             MapId = model.MapId;
