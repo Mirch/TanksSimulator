@@ -18,6 +18,18 @@ The format of the endpoints is e.g. `api/v1/Maps/{mapId}`. All the endpoints can
 
 ![API](https://i.imgur.com/4ttuUZa.png)
 
+### Example data
+
+To simulate a battle, you need to provide 2 tank IDs and a map ID:
+```
+{
+  "tanks": [
+    "5f0c62691d218f63246c9e9b", "5f0c62691d218f63246c9e9b"
+  ],
+  "mapId": "5f0e051a40e3fe550cc58679"
+}
+```
+
 ## The actual game
 
 The game simulates a battle between two given tanks, on a given map. The map is saved in the database in text form, sent to the `GameSimulator` and converted into a list of `Tile` objects at runtime. Tanks are randomly placed on the map at the beginning of each battle; one of them is randomly chosen to act first, and then they take turns making their moves. The following moves are possible:
