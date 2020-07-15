@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 namespace TanksSimulator.WeatherApi.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class WeatherController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
