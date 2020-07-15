@@ -23,6 +23,7 @@ namespace TanksSimulator.Game.Map
         {
             Size = model.Size;
             _tiles = new List<Tile>();
+            Entities = new List<Entity>();
             BuildMap(model.Tiles);
         }
 

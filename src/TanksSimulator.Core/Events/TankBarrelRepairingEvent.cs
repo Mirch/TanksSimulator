@@ -16,7 +16,6 @@ namespace TanksSimulator.Game.Events
 
         public override EventResult Process(Logger logger)
         {
-
             if (_remainingTurns == 0)
             {
                 _tank.Barrel.Repair();

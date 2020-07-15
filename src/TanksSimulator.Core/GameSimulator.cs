@@ -85,8 +85,17 @@ namespace TanksSimulator.Game
             while (Running)
             {
                 Logger.Log($"--- Turn {_turns}: ---");
-                chainedEvents.ForEach(c => c.Process(Logger)); // processing events from last turn before acting this turn
-                chainedEvents.Clear();
+
+                // Processing chained events from last turn before acting this turn
+                var eventsToAdd = new List<Event>();
+                for (int i = chainedEvents.Count - 1; i >= 0; i--)
+                {
+                    var chainResult = chainedEvents[i].Process(Logger);
+                    eventsToAdd.Add(chainResult.ChainEvent);
+                    chainedEvents.RemoveAt(i);
+                }
+                chainedEvents.AddRange(eventsToAdd);
+                eventsToAdd.Clear();
 
                 // This turn's action, as well as its consequences (chained events)
                 var resultEvent = _tanks[actingTank].Act();
@@ -105,7 +114,7 @@ namespace TanksSimulator.Game
                 }
 
                 // Changing the turn
-                actingTank = (actingTank + 1) % _tanks.Count; 
+                actingTank = (actingTank + 1) % _tanks.Count;
                 _turns++;
             }
             OnGameFinished();

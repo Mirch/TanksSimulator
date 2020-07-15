@@ -21,8 +21,26 @@ namespace TanksSimulator.Game.Events
 
         public override EventResult Process(Logger logger)
         {
-            var result = ProcessHit(_attacker, _target);
-            logger.Log(result);
+            double damage = 0.0;
+            if (_attacker is Tank)
+            {
+                damage = CalculateTankDamage(_attacker as Tank);
+
+                if (damage == 0)
+                {
+                    logger.Log($"{_attacker.Name} tried hitting {_target.Name}, but missed.");
+                }
+            }
+
+            // Only hit undestroyed components
+            var possibleHits = new TankComponent[] { _target.MainBody, _target.RoadWheel, _target.Barrel }
+                .Where(t => !t.IsDestroyed)
+                .ToList();
+
+            var hit = possibleHits[_random.Next(possibleHits.Count())];
+
+            logger.Log($"{_attacker.Name} hits {_target.Name}'s {hit.Name} for {damage} damage.");
+            hit.GetHit(damage);
 
             if (_target.IsDestroyed)
             {
@@ -31,44 +49,20 @@ namespace TanksSimulator.Game.Events
                 tankDestroyedEvent.Process(logger);
             }
 
-            if (_target.RoadWheel.IsDestroyed)
+            if (hit == _target.RoadWheel && _target.RoadWheel.IsDestroyed)
             {
                 logger.Log($"{_target.Name}'s road wheels are destroyed! {_target.Name} can't move.");
             }
 
-            if (_target.Barrel.IsDestroyed)
+            if (hit == _target.Barrel && _target.Barrel.IsDestroyed)
             {
+                logger.Log($"{_target.Name}'s barrel is destroyed!");
                 var resultEvent = new EventResult();
                 resultEvent.ChainEvent = new TankBarrelRepairingEvent(_target, 2);
                 return resultEvent;
             }
 
             return EventResult.Succeeded;
-        }
-
-        private string ProcessHit(Entity attacker, Tank target)
-        {
-            double damage = 0.0;
-            if (attacker is Tank)
-            {
-                damage = CalculateTankDamage(attacker as Tank);
-
-                if (damage == 0)
-                {
-                    return $"{attacker.Name} tried hitting {target.Name}, but missed.";
-                }
-            }
-
-            var possibleHits = new TankComponent[] { target.MainBody, target.RoadWheel, target.Barrel }
-                .Where(t => !t.IsDestroyed)
-                .ToList();
-
-            var hit = possibleHits[_random.Next(possibleHits.Count())];
-
-            var result = $"{attacker.Name} hits {target.Name}'s {hit.Name} for {damage} damage.";
-            hit.GetHit(damage);
-
-            return result;
         }
 
         private double CalculateTankDamage(Tank tank)
