@@ -24,7 +24,7 @@ The game simulates a battle between two given tanks, on a given map. The map is 
 - Moving one tile in any direction (either towards the opponent using an A* pathfinding algorithm, or somewhere where the opponent can't shoot);
 - Shooting the opponent (randomly between the main tank body, the barrel and the roadwheels);
 
-Each tank's action generates an **event** - which tell the game whether the action was finished, or if there is something else that needs to happen. Events can chain other events, which will be triggered at the beginning of the next turn. This is an example of an event flow:
+Each tank's action generates an **event** - which tells the game whether the action was finished, or if there is something else that needs to happen. Events can chain other events, which will be triggered at the beginning of the next turn. This is an example of an event flow:
 - `Tank1` shoots `Tank2`, generating a `TankShootEvent`;
 - The `TankShootEvent` calculates the shot to be in `Tank2`'s barrel for 15 damage;
 - `Tank2`'s barrel is now destroyed;
