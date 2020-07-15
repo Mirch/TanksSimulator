@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Transactions;
+using TanksSimulator.Game.Entities;
 using TanksSimulator.Game.Utils;
 using TanksSimulator.Shared.Models;
 
@@ -13,6 +14,8 @@ namespace TanksSimulator.Game.Map
     public class GameMap
     {
         private List<Tile> _tiles;
+
+        public List<Entity> Entities { get; private set; }
 
         public int Size { get; private set; }
 

@@ -17,6 +17,8 @@ namespace TanksSimulator.Game.Entities.Tank
         public bool CanShoot { get { return !Barrel.IsDestroyed; } }
         public bool IsDestroyed { get { return MainBody.IsDestroyed; } }
 
+        private int _remainingLandmines;
+
         public string TankId { get; private set; }
 
         public Tank Enemy { get; set; }
@@ -36,10 +38,17 @@ namespace TanksSimulator.Game.Entities.Tank
             Barrel = new TankBarrel(model.Barrel);
             MainBody = new TankMainBody();
             RoadWheel = new TankRoadWheels();
+
+            _remainingLandmines = 2; // initialize number of landmines
         }
 
         public override Event Act()
         {
+            if (!CanShoot && Position.DistanceTo(Enemy.Position) < 2)
+            {
+                return new PlantLandmineEvent(this);
+            }
+
             if (MainBody.Armor < 15 || !CanShoot) // go into defensive mode
             {
                 var destination = GetNeighourVisitableTiles()
@@ -55,7 +64,7 @@ namespace TanksSimulator.Game.Entities.Tank
 
             if (CanShoot && HasShootingLine(Position)) // if it can shoot, shoot
             {
-                return new TankShootEvent(this, Enemy);
+                return new TankHitEvent(this, Enemy);
             }
             else // if there is nothing to do, move towards the enemy
             {
@@ -74,6 +83,11 @@ namespace TanksSimulator.Game.Entities.Tank
 
         private bool HasShootingLine(Vector2i startingPosition)
         {
+            if (startingPosition.DistanceTo(Enemy.Position) > Barrel.Range)
+            {
+                return false;
+            }
+
             var shootingLine = new Line(startingPosition, Enemy.Position);
             var collidingTiles = shootingLine.GetIntersectingPoints();
 

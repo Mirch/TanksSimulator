@@ -13,6 +13,7 @@ namespace TanksSimulator.Game.Entities
         public Entity(GameMap map)
         {
             GameMap = map;
+            map.Entities.Add(this);
         }
 
         public abstract Event Act();

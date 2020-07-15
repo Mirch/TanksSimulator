@@ -7,6 +7,7 @@ namespace TanksSimulator.Game.Entities.Tank
 {
     public abstract class TankComponent
     {
+        public virtual string Name { get; }
         public double Armor { get; protected set; }
         public bool IsDestroyed {
             get {
@@ -27,6 +28,7 @@ namespace TanksSimulator.Game.Entities.Tank
 
     public class TankRoadWheels : TankComponent
     {
+        public override string Name { get; } = "road wheels";
         public TankRoadWheels()
             : base()
         {
@@ -35,6 +37,7 @@ namespace TanksSimulator.Game.Entities.Tank
 
     public class TankBarrel : TankComponent
     {
+        public override string Name { get; } = "barrel";
         public double Range { get; private set; }
         public double Damage { get; private set; }
         public double Accuracy { get; private set; }
@@ -55,6 +58,7 @@ namespace TanksSimulator.Game.Entities.Tank
 
     public class TankMainBody : TankComponent
     {
+        public override string Name { get; } = "main body";
         public TankMainBody()
             : base()
         {
