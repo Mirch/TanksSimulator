@@ -5,22 +5,22 @@ services:
       context: .
       dockerfile: TanksSimulator.WebApi/Dockerfile
     ports:
-    - "80:80"
+    - "8000:80"
   weather:
     build:
       context: .
       dockerfile: TanksSimulator.WeatherApi/Dockerfile
     ports:
-    - "8000:80"
+    - "8001:80"
   data:
     build: 
       context: .
       dockerfile: TanksSimulator.DataApi/Dockerfile
     ports:
-    - "8001:80"
+    - "8002:80"
   results:
     build: 
       context: .
       dockerfile: TanksSimulator.ResultsApi/Dockerfile
     ports:
-    - "8002:80"
+    - "8003:80"
