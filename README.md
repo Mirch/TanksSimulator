@@ -18,13 +18,31 @@ The format of the endpoints is e.g. `api/v1/Maps/{mapId}`. All the endpoints can
 
 ![API](https://i.imgur.com/4ttuUZa.png)
 
-### Example data
+### Entities and maps
 
+#### Tanks
+Tanks are made up of 3 components: a main body, a barrel and road wheels. Any of them can be hit durring a battle, resulting in different events.
+You can choose between 3 tanks:
+Tank Name | Tank ID | Description
+------- | --------- | ------------
+Swifty | 5f0c62691d218f63246c9e9b | High range, low damage
+Chunky | 5f0f5d792ad06286095c9b2b | Low range, high damage
+Simply | 5f0f5e0a2ad06286095c9b2c | Midrange, mid damage
+
+#### Maps
+Maps are simple and only composed of two types of tiles: plain and rocks - tanks can not travers rock tiles.
+You can also choose between the following maps:
+Map ID | Description
+-------|---------------
+5f0e051a40e3fe550cc58679 | 50x50, griddy map, full of obstacles
+5f0f60409af9bdf5cb6f9779 | 50x50, more open space, but still contains good chunks of solid blocks
+
+### Battles
 To simulate a battle, you need to provide 2 tank IDs and a map ID:
 ```
 {
   "tanks": [
-    "5f0c62691d218f63246c9e9b", "5f0c62691d218f63246c9e9b"
+    "5f0c62691d218f63246c9e9b", "5f0f5d792ad06286095c9b2b"
   ],
   "mapId": "5f0e051a40e3fe550cc58679"
 }
