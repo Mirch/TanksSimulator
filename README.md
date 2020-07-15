@@ -32,4 +32,4 @@ Each tank's action generates an **event** - which tell the game whether the acti
 - At the beginning of the next turn, the `TankBarrelRepairingEvent` is trigerred, which chains another `TankBarrelRepairingEvent` for next turn;
 - Once the barrel is repaired, a `Succeeded` event is returned, and the game continues normally.
 
-The game ends when one of the tank's main body is destroyed.  
+The game ends when one of the tank's main body is destroyed.   
