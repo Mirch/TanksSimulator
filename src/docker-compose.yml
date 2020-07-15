@@ -30,3 +30,7 @@ services:
     - "8003:80"
     networks:
     - tanks-network
+
+networks:
+  tanks-network:
+    external: true
