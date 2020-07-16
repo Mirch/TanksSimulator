@@ -30,6 +30,9 @@ services:
       dockerfile: TanksSimulator.WebApi/Dockerfile
     ports:
     - "8080:80"
+    - "8001:8001"
+    - "8001:8002"
+    - "8003:8003"
     networks:
     - tanks-network
     environment:
