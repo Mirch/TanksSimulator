@@ -44,8 +44,9 @@ namespace TanksSimulator.Game.Entities.Tank
 
         public override Event Act()
         {
-            if (!CanShoot && Position.DistanceTo(Enemy.Position) < 2)
+            if (!CanShoot && Position.DistanceTo(Enemy.Position) < 2 && _remainingLandmines > 0)
             {
+                _remainingLandmines--;
                 return new PlantLandmineEvent(this);
             }
 
