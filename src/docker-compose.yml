@@ -6,24 +6,18 @@ services:
       dockerfile: TanksSimulator.WeatherApi/Dockerfile
     ports:
     - "8001:80"
-    networks:
-    - tanks-network  
   data:
     build: 
       context: .
       dockerfile: TanksSimulator.DataApi/Dockerfile
     ports:
     - "8002:80"
-    networks:
-    - tanks-network  
   results:
     build: 
       context: .
       dockerfile: TanksSimulator.ResultsApi/Dockerfile
     ports:
     - "8003:80"
-    networks:
-    - tanks-network
   web:
     build: 
       context: .
@@ -33,13 +27,7 @@ services:
     - "8081:80"
     - "8082:80"
     - "8083:80"
-    networks:
-    - tanks-network
     environment:
     - WEATHER_API_URL=http://weather:80
     - DATA_API_URL=http://data:80
     - RESULTS_API_URL=http://results:80
-
-networks:
-  tanks-network:
-    external: true
