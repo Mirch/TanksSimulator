@@ -2,6 +2,8 @@
 
 ![API CI Pipeline](https://github.com/Mirch/TanksSimulator/workflows/API%20CI%20Pipeline/badge.svg)
 
+Fine the running project at [this link](http://ec2-18-184-93-239.eu-central-1.compute.amazonaws.com:8080/index.html).
+
 This repository contains my solution for the tanks simulator code challenge. It's developed in `ASP.NET Core 3.1`, with a `MongoDB` database, and runs using `docker` and `docker-compose`.
 
 ## Solution structure
@@ -73,3 +75,4 @@ There are a few things that could have been done better throughout the project, 
 - Segregating the HTTP request sending functionality in the Shared project and using it in all the other projects;
 - Using separate databases for the Results and Data APIs - currently they are using different collections inside the same Mongo database;
 - Adding unit testing for all projects;
+- There is no concurrency implemented for the DB right now, which is not an issue with the current setup, but could be if other features were added (e.g. updating logs in real time); 
