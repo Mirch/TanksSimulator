@@ -38,7 +38,7 @@ services:
     environment:
     - WEATHER_API_URL=http://weather:80
     - DATA_API_URL=http://data:80
-    - RESULT_API_URL=http://results:80
+    - RESULTS_API_URL=http://results:80
 
 networks:
   tanks-network:
