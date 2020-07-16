@@ -57,9 +57,10 @@ namespace TanksSimulator.WebApi.Services
 
         public async Task<GameDataModel> UpdateAsync(GameDataModel model)
         {
-            var content = new StringContent(JsonConvert.SerializeObject(new GameDataApiResponseModel(model)), Encoding.UTF8, "application/json");
+            var requestModel = new GameDataApiRequestModel(model);
+            var content = new StringContent(JsonConvert.SerializeObject(requestModel), Encoding.UTF8, "application/json");
 
-            var response = await _client.PutAsJsonAsync($"/api/score/", content);
+            var response = await _client.PutAsync($"/api/score/", content);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)

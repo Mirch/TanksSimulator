@@ -12,11 +12,15 @@ namespace TanksSimulator.WebApi.Services
     public class GameSimulatorService
     {
         private readonly ResultsApiClient _resultsApiClient;
+        private readonly DataApiClient _dataApiClient;
+
 
         public GameSimulatorService(
-            ResultsApiClient resultsApiClient)
+            ResultsApiClient resultsApiClient,
+            DataApiClient dataApiClient)
         {
             _resultsApiClient = resultsApiClient;
+            _dataApiClient = dataApiClient;
         }
 
         private async void OnGameFinished(object sender, GameFinishedEventArgs e)
@@ -33,17 +37,17 @@ namespace TanksSimulator.WebApi.Services
             await _resultsApiClient.UpdateAsync(gameData);
         }
 
-        public async Task<GameDataModel> SimulateAsync(string gameId)
+        public async Task<GameDataModel> SimulateAsync(string gameId, TankModel tank1, TankModel tank2, GameMapModel map)
         {
             var gameData = await _resultsApiClient.GetScoreAsync(gameId);
 
-            GameSimulator simulator = new GameSimulator(gameData.Id, Environment.GetEnvironmentVariable("WEATHER_API_URL"), gameData.GameMapModel);
+            GameSimulator simulator = new GameSimulator(gameData.Id, Environment.GetEnvironmentVariable("WEATHER_API_URL"), map);
             simulator.GameFinished += OnGameFinished;
 
             gameData.Status = GameStatus.InProgress;
             await _resultsApiClient.UpdateAsync(gameData);
 
-            simulator.Start(gameData.TankModel1, gameData.TankModel2);
+            simulator.Start(tank1, tank2);
 
             return gameData;
         }

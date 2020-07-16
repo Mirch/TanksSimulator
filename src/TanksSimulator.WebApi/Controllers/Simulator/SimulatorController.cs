@@ -44,15 +44,12 @@ namespace TanksSimulator.WebApi.Controllers.Simulator
             var gameData = await _resultsApiClient.CreateAsync(new GameDataModel
             {
                 Tank1Id = request.Tanks[0],
-                TankModel1 = tank1,
                 Tank2Id = request.Tanks[1],
-                TankModel2 = tank2,
                 MapId = request.MapId,
-                GameMapModel = map,
                 Status = GameStatus.InQueue
             });
 
-            var result = await _gameSimulator.SimulateAsync(gameData.Id);
+            var result = await _gameSimulator.SimulateAsync(gameData.Id, tank1, tank2, map);
 
             return Ok(new GameDataApiResponseModel(result));
         }

@@ -22,9 +22,8 @@ namespace TanksSimulator.ResultsApi.Controllers.Simulator
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var result = (await _gameDataRepository
-                .GetAsync())
-                .Select(d => new GameDataApiResponseModel(d));
+            var result = await _gameDataRepository
+                .GetAsync();
 
             return Ok(result);
         }
@@ -40,7 +39,7 @@ namespace TanksSimulator.ResultsApi.Controllers.Simulator
                 return NotFound(new { error = "Could not find any data for this battle." });
             }
 
-            return Ok(new GameDataApiResponseModel(result));
+            return Ok(result);
         }
 
         [HttpPost]
@@ -66,6 +65,7 @@ namespace TanksSimulator.ResultsApi.Controllers.Simulator
             var result = await _gameDataRepository
                 .UpdateAsync(new GameDataModel
                 {
+                    Id = model.Id,
                     Tank1Id = model.Tank1Id,
                     Tank2Id = model.Tank2Id,
                     MapId = model.MapId,

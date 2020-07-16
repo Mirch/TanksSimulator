@@ -90,14 +90,17 @@ namespace TanksSimulator.Game
             {
                 Logger.Log($"--- Turn {_turns}: ---");
                 _map.CurrentWeather = await _weatherApiClient.GetWeatherAsync();
-                Logger.Log($"It's {_map.CurrentWeather} outsite.");
+                Logger.Log($"It's {_map.CurrentWeather} outside.");
 
                 // Processing chained events from last turn before acting this turn
                 var eventsToAdd = new List<Event>();
                 for (int i = chainedEvents.Count - 1; i >= 0; i--)
                 {
                     var chainResult = chainedEvents[i].Process(Logger);
-                    eventsToAdd.Add(chainResult.ChainEvent);
+                    if (chainResult != EventResult.Succeeded)
+                    {
+                        eventsToAdd.Add(chainResult.ChainEvent);
+                    }
                     chainedEvents.RemoveAt(i);
                 }
                 chainedEvents.AddRange(eventsToAdd);
