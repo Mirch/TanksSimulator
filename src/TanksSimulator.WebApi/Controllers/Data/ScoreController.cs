@@ -9,7 +9,8 @@ using TanksSimulator.WebApi.Services;
 namespace TanksSimulator.ResultsApi.Controllers.Simulator
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/{version:apiVersion}/[controller]")]
     public class ScoreController : ControllerBase
     {
         private readonly ResultsApiClient _resultsApiClient;
