@@ -6,6 +6,23 @@ Fine the running project at [this link](http://ec2-18-184-93-239.eu-central-1.co
 
 This repository contains my solution for the tanks simulator code challenge. It's developed in `ASP.NET Core 3.1`, with a `MongoDB` database, and runs using `docker` and `docker-compose`.
 
+## Running the project
+
+To build the project for the first time, run:
+
+```
+git pull https://github.com/Mirch/TanksSimulator/
+cd ./TanksSimulator/src
+docker-compose up
+```
+
+If any changes are made to the project, run:
+```
+docker-compose build
+docker-compose up
+```
+
+
 ## Solution structure
 
 The solution contains 6 projects:
