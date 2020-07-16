@@ -6,11 +6,13 @@ This repository contains my solution for the tanks simulator code challenge. It'
 
 ## Solution structure
 
-The solution contains 4 projects:
+The solution contains 6 projects:
 - **TanksSimulator.WebApi** - the API that allows you to get information from the database and start new game simulations;
 - **TanksSimulator.Game** - a class library that contains all the game logic;
 - **TanksSimulator.Shared** - a class library that contains classes that are shared by the API and Game projects; 
-- **TanksSimulator.WebApi.Tests** - contains (some) unit tests for the Web API, in order to use the testing step in the CI pipeline; 
+- **TanksSimulator.WeatherApi** - contains a single endpoint that returns a random weather condition;
+- **TanksSimulator.DataApi** - contains endpoints for retrieving maps and tanks;
+- **TanksSimulator.ResultsApi** - contains create/read/update endpoints for game data (what game is played on which map, with which tanks, who won, battle logs);
 
 ## API
 
@@ -62,4 +64,12 @@ Each tank's action generates an **event** - which tells the game whether the act
 - At the beginning of the next turn, the `TankBarrelRepairingEvent` is trigerred, which chains another `TankBarrelRepairingEvent` for next turn;
 - Once the barrel is repaired, a `Succeeded` event is returned, and the game continues normally.
 
-The game ends when one of the tank's main body is destroyed.   
+The game ends when one of the tank's main body is destroyed.  
+
+## What could be done better
+
+There are a few things that could have been done better throughout the project, such as:
+- Using Dependency Injection in the Game project (e.g. with Ninject), reducing the code complexity;
+- Segregating the HTTP request sending functionality in the Shared project and using it in all the other projects;
+- Using separate databases for the Results and Data APIs - currently they are using different collections inside the same Mongo database;
+- Adding unit testing for all projects;
