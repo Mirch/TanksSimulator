@@ -30,15 +30,15 @@ services:
       dockerfile: TanksSimulator.WebApi/Dockerfile
     ports:
     - "8080:80"
-    - "8081:8001"
-    - "8082:8002"
-    - "8083:8003"
+    - "8081:80"
+    - "8082:80"
+    - "8083:80"
     networks:
     - tanks-network
     environment:
-    - WEATHER_API_URL=http://localhost:8081
-    - DATA_API_URL=http://localhost:8082
-    - RESULT_API_URL=http://localhost:8083
+    - WEATHER_API_URL=http://weather:80
+    - DATA_API_URL=http://data:80
+    - RESULT_API_URL=http://results:80
 
 networks:
   tanks-network:
