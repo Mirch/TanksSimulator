@@ -43,40 +43,5 @@ namespace TanksSimulator.ResultsApi.Controllers.Simulator
 
             return Ok(new GameDataApiResponseModel(result));
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] GameDataApiRequestModel model)
-        {
-            var result = await _resultsApiClient
-                .CreateAsync(new GameDataModel
-                {
-                    Tank1Id = model.Tank1Id,
-                    Tank2Id = model.Tank2Id,
-                    MapId = model.MapId,
-                    Status = model.Status,
-                    WinnerId = model.WinnerId,
-                    Logs = model.Logs,
-                });
-
-            return Ok(result);
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> Update([FromBody] GameDataApiRequestModel model)
-        {
-            var result = await _resultsApiClient
-                .UpdateAsync(new GameDataModel
-                {
-                    Tank1Id = model.Tank1Id,
-                    Tank2Id = model.Tank2Id,
-                    MapId = model.MapId,
-                    Status = model.Status,
-                    WinnerId = model.WinnerId,
-                    Logs = model.Logs,
-                });
-
-            return Ok(result);
-        }
-
     }
 }
