@@ -2,7 +2,7 @@
 
 ![API CI Pipeline](https://github.com/Mirch/TanksSimulator/workflows/API%20CI%20Pipeline/badge.svg)
 
-Fine the running project at [this link](http://ec2-18-184-93-239.eu-central-1.compute.amazonaws.com:8080/index.html).
+Find the running project at [this link](http://ec2-18-184-93-239.eu-central-1.compute.amazonaws.com:8080/index.html).
 
 This repository contains my solution for the tanks simulator code challenge. It's developed in `ASP.NET Core 3.1`, with a `MongoDB` database, and runs using `docker` and `docker-compose`.
 
@@ -76,14 +76,37 @@ The game simulates a battle between two given tanks, on a given map. The map is 
 - Shooting the opponent (randomly between the main tank body, the barrel and the roadwheels);
 
 Each tank's action generates an **event** - which tells the game whether the action was finished, or if there is something else that needs to happen. Events can chain other events, which will be triggered at the beginning of the next turn. This is an example of an event flow:
-- `Tank1` shoots `Tank2`, generating a `TankShootEvent`;
-- The `TankShootEvent` calculates the shot to be in `Tank2`'s barrel for 15 damage;
+- `Tank1` shoots `Tank2`, generating a `TankHitEvent`;
+- The `TankHitEvent` calculates the shot to be in `Tank2`'s barrel for 15 damage;
 - `Tank2`'s barrel is now destroyed;
-- The `TankShootEvent` sees that `Tank2`'s barrel is destroyed, and chains a `TankBarrelRepairingEvent` for next turn - this lets `Tank2` repair its barrel during the next 2 turns;
+- The `TankHitEvent` sees that `Tank2`'s barrel is destroyed, and chains a `TankBarrelRepairingEvent` for next turn - this lets `Tank2` repair its barrel during the next 2 turns;
 - At the beginning of the next turn, the `TankBarrelRepairingEvent` is trigerred, which chains another `TankBarrelRepairingEvent` for next turn;
 - Once the barrel is repaired, a `Succeeded` event is returned, and the game continues normally.
 
 The game ends when one of the tank's main body is destroyed.  
+
+### Accuracy 
+
+Each tank's barrel has an accuracy that can lead to them hitting or missing the target, based on a random roll.
+
+### Weather
+
+Each turn, the weather is pulled from the WeatherApi service; this affects the gameplay as follows:
+- Sunny weather does nothing;
+- Freezing weather reduces the accuracy at half;
+- Raining weather reduces the tanks' range at half;
+
+### Repairing the barrel
+
+If a tank's barrel is destroyed, it can be repaired over the course of 2 turns (it doesn't have to be that tank's turn). This ensures that the battle continues, but offers the opponent an advantage for destroying the barrel.
+
+### Moving impairment
+
+If a tank's road wheels are destroyed, it cannot move anymore - this is not repairable. The tank can still shoot.
+
+### Landmines
+
+Each tank has 2 landmines that it can plant over the course of a game. A landmine is triggered when it is on the same tile as an opponent tank and it explodes, dealing damage to the tank. If there is no collision with an opponent tank, the landmine keeps waiting and checking for collision.
 
 ## What could be done better
 
